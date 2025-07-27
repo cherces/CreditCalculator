@@ -1,6 +1,6 @@
 namespace CreditCalculator.Models;
 
-public class YearlyRateCreditparametres : CreditParametresBase
+public class YearlyRateCreditParametres : CreditParametresBase
 {
     public int Term { get; set; }
 }
