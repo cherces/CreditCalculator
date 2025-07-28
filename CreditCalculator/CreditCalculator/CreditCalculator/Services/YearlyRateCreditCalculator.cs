@@ -5,7 +5,7 @@ namespace CreditCalculator.Services;
 
 public class YearlyRateCreditCalculator : ICreditCalculator
 {
-    public List<PaymentScheduleItem> CalculateAnnuitetPaymentSchedules(CreditParametresBase creditParametres)
+    public List<PaymentScheduleItem> CalculateAnnuitetPaymentsSchedule(CreditParametresBase creditParametres)
     {
         var paymentsSchedule = new List<PaymentScheduleItem>();
         
@@ -36,7 +36,6 @@ public class YearlyRateCreditCalculator : ICreditCalculator
 
             // 7. Уменьшаем остаток
             debt -= principal;
-
             if (debt < 0) debt = 0;
 
             // 8. Добавляем платеж в график
@@ -44,6 +43,7 @@ public class YearlyRateCreditCalculator : ICreditCalculator
             {
                 PaymentNumber = month,
                 PaymentDate = startDate.AddMonths(month),
+                Amount = Math.Round(principal + interest, 2),
                 PrincipalAmount = Math.Round(principal, 2),
                 InterestAmount = Math.Round(interest, 2),
                 DebtAmount = Math.Round(debt, 2)
@@ -53,8 +53,39 @@ public class YearlyRateCreditCalculator : ICreditCalculator
         return paymentsSchedule;
     }
 
-    public List<PaymentScheduleItem> CalculateDifferentiatedPaymentSchedules(CreditParametresBase creditParametres)
+    public List<PaymentScheduleItem> CalculateDifferentiatedPaymentsSchedule(CreditParametresBase creditParametres)
     {
-        throw new NotImplementedException();
+        var paymentsSchedule = new List<PaymentScheduleItem>();
+        
+        var yearlyRateCreditParametres = creditParametres as YearlyRateCreditParametres;
+        
+        // Переводим годовую ставку в месячную
+        decimal i = yearlyRateCreditParametres.Rate / 12;
+        
+        decimal principal = yearlyRateCreditParametres.Amount / yearlyRateCreditParametres.Term;
+        
+        DateTime startDate = DateTime.Today;
+        
+        for (int month = 1; month <= yearlyRateCreditParametres.Term; month++)
+        {
+            // Проценты за текущий месяц = остаток долга * месячную ставку
+            decimal interest = (yearlyRateCreditParametres.Amount - principal * (month - 1)) * i;
+
+            // Остаток долга после внесения платежа
+            decimal debt = yearlyRateCreditParametres.Amount - principal * month;
+
+            // Добавляем платеж в график платежей
+            paymentsSchedule.Add(new PaymentScheduleItem
+            {
+                PaymentNumber = month,
+                PaymentDate = startDate.AddMonths(month),
+                Amount = Math.Round(principal + interest, 2),
+                PrincipalAmount = Math.Round(principal, 2),
+                InterestAmount = Math.Round(interest, 2),
+                DebtAmount = Math.Round(Math.Max(debt, 0), 2)
+            });
+        }
+        
+        return paymentsSchedule;
     }
 }

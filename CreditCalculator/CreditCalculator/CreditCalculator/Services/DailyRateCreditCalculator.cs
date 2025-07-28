@@ -5,7 +5,7 @@ namespace CreditCalculator.Services;
 
 public class DailyRateCreditCalculator : ICreditCalculator
 {
-    public List<PaymentScheduleItem> CalculateAnnuitetPaymentSchedules(CreditParametresBase creditParametres)
+    public List<PaymentScheduleItem> CalculateAnnuitetPaymentsSchedule(CreditParametresBase creditParametres)
     {
         var paymentsSchedule = new List<PaymentScheduleItem>();
         
@@ -46,6 +46,7 @@ public class DailyRateCreditCalculator : ICreditCalculator
             {
                 PaymentNumber = step,
                 PaymentDate = date.AddDays(step * dailyRateCreditParametres.StepDays),
+                Amount = Math.Round(principal + interest, 2),
                 PrincipalAmount = Math.Round(principal, 2),
                 InterestAmount = Math.Round(interest, 2),
                 DebtAmount = Math.Round(debt, 2)
@@ -55,8 +56,47 @@ public class DailyRateCreditCalculator : ICreditCalculator
         return paymentsSchedule;
     }
 
-    public List<PaymentScheduleItem> CalculateDifferentiatedPaymentSchedules(CreditParametresBase creditParametres)
+    public List<PaymentScheduleItem> CalculateDifferentiatedPaymentsSchedule(CreditParametresBase creditParametres)
     {
-        throw new NotImplementedException();
+        var paymentsSchedule = new List<PaymentScheduleItem>();
+        
+        var dailyRateCreditParametres = creditParametres as DailyRateCreditParametres;
+
+        // Количество платежей
+        int n = (int)Math.Ceiling((decimal)dailyRateCreditParametres.Term / dailyRateCreditParametres.StepDays);
+
+        // Фиксированная часть тела кредита
+        decimal principal = dailyRateCreditParametres.Amount / n;
+
+        DateTime startDate = DateTime.Today;
+
+        for (int p = 1; p <= n; p++)
+        {
+            // Остаток долга до платежа
+            decimal debt = dailyRateCreditParametres.Amount - principal * (p - 1);
+
+            // Количество дней в этом платёжном периоде
+            int days = (p == n) 
+                ? dailyRateCreditParametres.Term - dailyRateCreditParametres.StepDays * (p - 1) // последний период может быть короче
+                : dailyRateCreditParametres.StepDays;
+
+            // Проценты за этот период
+            decimal interest = debt * dailyRateCreditParametres.Rate * days;
+
+            // Новый остаток долга
+            decimal newDebt = debt - principal;
+
+            paymentsSchedule.Add(new PaymentScheduleItem
+            {
+                PaymentNumber = p,
+                PaymentDate = startDate.AddDays(p * dailyRateCreditParametres.StepDays),
+                Amount = Math.Round(principal + interest, 2),
+                PrincipalAmount = Math.Round(principal, 2),
+                InterestAmount = Math.Round(interest, 2),
+                DebtAmount = Math.Round(Math.Max(newDebt, 0), 2)
+            });
+        }
+
+        return paymentsSchedule;
     }
 }
