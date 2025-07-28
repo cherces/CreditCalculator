@@ -1,0 +1,72 @@
+@model CreditCalculator.Models.Form.CreditParametresFormModel
+
+@{
+    ViewData["Title"] = "Кредитный калькулятор";
+}
+
+<div class="container mt-4">
+    <h2>Кредитный калькулятор</h2>
+    <form asp-action="Calculator" method="post" id="creditForm">
+        <div class="form-group">
+            <label asp-for="RateType"></label>
+            <select asp-for="RateType"
+                    asp-items="Html.GetEnumSelectList<CreditCalculator.Models.Enums.RateType>()"
+                    class="form-control"
+                    id="rateType">
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Amount"></label>
+            <input asp-for="Amount" class="form-control" />
+            <span asp-validation-for="Amount" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Term"></label>
+            <input asp-for="Term" class="form-control" />
+            <span asp-validation-for="Term" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Rate"></label>
+            <input asp-for="Rate" class="form-control" />
+            <span asp-validation-for="Rate" class="text-danger"></span>
+        </div>
+
+        <div class="form-group" id="stepDaysBlock" style="display:none;">
+            <label asp-for="StepDays"></label>
+            <input asp-for="StepDays" class="form-control" />
+            <span asp-validation-for="StepDays" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="PaymentType"></label>
+            <select asp-for="PaymentType"
+                    asp-items="Html.GetEnumSelectList<CreditCalculator.Models.Enums.PaymentType>()"
+                    class="form-control">
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success mt-3">Рассчитать</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(function () {
+            function toggleStepDays() {
+                let val = $("#rateType").val();
+                if (val === "2") { // Daily = 2
+                    $("#stepDaysBlock").show();
+                } else {
+                    $("#stepDaysBlock").hide();
+                }
+            }
+
+            $("#rateType").change(toggleStepDays);
+            toggleStepDays();
+        });
+    </script>
+}

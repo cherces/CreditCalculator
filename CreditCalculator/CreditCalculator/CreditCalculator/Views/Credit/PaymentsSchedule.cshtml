@@ -1,0 +1,44 @@
+@model List<CreditCalculator.Models.PaymentsScheduleItem>
+
+@{
+    ViewData["Title"] = "График платежей";
+}
+
+<div class="container mt-4">
+    <h2>График платежей</h2>
+
+    @if (Model == null || !Model.Any())
+    {
+        <p>Нет данных для отображения.</p>
+    }
+    else
+    {
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>№</th>
+                <th>Дата платежа</th>
+                <th>Сумма платежа</th>
+                <th>Основной долг</th>
+                <th>Проценты</th>
+                <th>Остаток долга</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.PaymentNumber</td>
+                    <td>@item.PaymentDate.ToString("dd.MM.yyyy")</td>
+                    <td>@item.Amount</td>
+                    <td>@item.PrincipalAmount</td>
+                    <td>@item.InterestAmount</td>
+                    <td>@item.DebtAmount</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+
+    <a class="btn btn-primary" href="@Url.Action("Calculator", "Credit")">Назад</a>
+</div>

@@ -5,9 +5,9 @@ namespace CreditCalculator.Services;
 
 public class DailyRateCreditCalculator : ICreditCalculator
 {
-    public List<PaymentScheduleItem> CalculateAnnuitetPaymentsSchedule(CreditParametresBase creditParametres)
+    public List<PaymentsScheduleItem> CalculateAnnuitetPaymentsSchedule(CreditParametresBase creditParametres)
     {
-        var paymentsSchedule = new List<PaymentScheduleItem>();
+        var paymentsSchedule = new List<PaymentsScheduleItem>();
         
         var dailyRateCreditParametres = creditParametres as DailyRateCreditParametres;
 
@@ -42,7 +42,7 @@ public class DailyRateCreditCalculator : ICreditCalculator
             if (debt < 0) debt = 0;
 
             // 9. Добавляем платеж в график
-            paymentsSchedule.Add(new PaymentScheduleItem
+            paymentsSchedule.Add(new PaymentsScheduleItem
             {
                 PaymentNumber = step,
                 PaymentDate = date.AddDays(step * dailyRateCreditParametres.StepDays),
@@ -56,9 +56,9 @@ public class DailyRateCreditCalculator : ICreditCalculator
         return paymentsSchedule;
     }
 
-    public List<PaymentScheduleItem> CalculateDifferentiatedPaymentsSchedule(CreditParametresBase creditParametres)
+    public List<PaymentsScheduleItem> CalculateDifferentiatedPaymentsSchedule(CreditParametresBase creditParametres)
     {
-        var paymentsSchedule = new List<PaymentScheduleItem>();
+        var paymentsSchedule = new List<PaymentsScheduleItem>();
         
         var dailyRateCreditParametres = creditParametres as DailyRateCreditParametres;
 
@@ -86,7 +86,7 @@ public class DailyRateCreditCalculator : ICreditCalculator
             // Новый остаток долга
             decimal newDebt = debt - principal;
 
-            paymentsSchedule.Add(new PaymentScheduleItem
+            paymentsSchedule.Add(new PaymentsScheduleItem
             {
                 PaymentNumber = p,
                 PaymentDate = startDate.AddDays(p * dailyRateCreditParametres.StepDays),

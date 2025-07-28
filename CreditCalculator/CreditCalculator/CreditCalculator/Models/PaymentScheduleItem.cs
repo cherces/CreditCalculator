@@ -1,6 +1,6 @@
 namespace CreditCalculator.Models;
 
-public class PaymentScheduleItem
+public class PaymentsScheduleItem
 {
     public int PaymentNumber { get; set; }
     public DateTime PaymentDate { get; set; }

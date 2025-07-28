@@ -5,9 +5,9 @@ namespace CreditCalculator.Services;
 
 public class YearlyRateCreditCalculator : ICreditCalculator
 {
-    public List<PaymentScheduleItem> CalculateAnnuitetPaymentsSchedule(CreditParametresBase creditParametres)
+    public List<PaymentsScheduleItem> CalculateAnnuitetPaymentsSchedule(CreditParametresBase creditParametres)
     {
-        var paymentsSchedule = new List<PaymentScheduleItem>();
+        var paymentsSchedule = new List<PaymentsScheduleItem>();
         
         var yearlyRateCreditParametres = creditParametres as YearlyRateCreditParametres;
 
@@ -39,7 +39,7 @@ public class YearlyRateCreditCalculator : ICreditCalculator
             if (debt < 0) debt = 0;
 
             // 8. Добавляем платеж в график
-            paymentsSchedule.Add(new PaymentScheduleItem
+            paymentsSchedule.Add(new PaymentsScheduleItem
             {
                 PaymentNumber = month,
                 PaymentDate = startDate.AddMonths(month),
@@ -53,9 +53,9 @@ public class YearlyRateCreditCalculator : ICreditCalculator
         return paymentsSchedule;
     }
 
-    public List<PaymentScheduleItem> CalculateDifferentiatedPaymentsSchedule(CreditParametresBase creditParametres)
+    public List<PaymentsScheduleItem> CalculateDifferentiatedPaymentsSchedule(CreditParametresBase creditParametres)
     {
-        var paymentsSchedule = new List<PaymentScheduleItem>();
+        var paymentsSchedule = new List<PaymentsScheduleItem>();
         
         var yearlyRateCreditParametres = creditParametres as YearlyRateCreditParametres;
         
@@ -75,7 +75,7 @@ public class YearlyRateCreditCalculator : ICreditCalculator
             decimal debt = yearlyRateCreditParametres.Amount - principal * month;
 
             // Добавляем платеж в график платежей
-            paymentsSchedule.Add(new PaymentScheduleItem
+            paymentsSchedule.Add(new PaymentsScheduleItem
             {
                 PaymentNumber = month,
                 PaymentDate = startDate.AddMonths(month),

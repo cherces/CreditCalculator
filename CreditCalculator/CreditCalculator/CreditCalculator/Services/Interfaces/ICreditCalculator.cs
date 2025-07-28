@@ -4,6 +4,6 @@ namespace CreditCalculator.Services.Interfaces;
 
 public interface ICreditCalculator
 {
-    List<PaymentScheduleItem> CalculateAnnuitetPaymentsSchedule(CreditParametresBase creditParametres);
-    List<PaymentScheduleItem> CalculateDifferentiatedPaymentsSchedule(CreditParametresBase creditParametres);
+    List<PaymentsScheduleItem> CalculateAnnuitetPaymentsSchedule(CreditParametresBase creditParametres);
+    List<PaymentsScheduleItem> CalculateDifferentiatedPaymentsSchedule(CreditParametresBase creditParametres);
 }
