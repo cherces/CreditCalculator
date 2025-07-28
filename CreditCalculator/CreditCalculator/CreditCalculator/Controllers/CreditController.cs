@@ -7,14 +7,11 @@ namespace CreditCalculator.Controllers;
 
 public class CreditController : Controller
 {
-    private readonly ICreditCalculatorFactory _calculatorFactory;
-    private readonly ICreditParametresFactory _paramFactory;
+    private readonly ICreditCalculationService _calculationService;
 
-    public CreditController(ICreditCalculatorFactory calculatorFactory,
-        ICreditParametresFactory paramFactory)
+    public CreditController(ICreditCalculationService calculationService)
     {
-        _calculatorFactory = calculatorFactory;
-        _paramFactory = paramFactory;
+        _calculationService = calculationService;
     }
 
     [HttpGet]
@@ -35,13 +32,7 @@ public class CreditController : Controller
             return View(model);
         }
 
-        var calculator = _calculatorFactory.GetCalculator(model.RateType);
-
-        var parameters = _paramFactory.CreateParameters(model); // фабрика сама решает
-
-        var schedule = model.PaymentType == PaymentType.Annuity
-            ? calculator.CalculateAnnuitetPaymentsSchedule(parameters)
-            : calculator.CalculateDifferentiatedPaymentsSchedule(parameters);
+        var schedule = _calculationService.Calculate(model);
 
         return View("PaymentsSchedule", schedule);
     }

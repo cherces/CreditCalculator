@@ -10,8 +10,10 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ICreditCalculatorFactory, CreditCalculatorFactory>();
         services.AddScoped<ICreditParametresFactory, CreditParametresFactory>();
         
-        services.AddScoped<YearlyRateCreditCalculator>();
-        services.AddScoped<DailyRateCreditCalculator>();
+        services.AddSingleton<YearlyRateCreditCalculator>();
+        services.AddSingleton<DailyRateCreditCalculator>();
+        
+        services.AddScoped<ICreditCalculationService, CreditCalculationService>();
 
         return services;
     }

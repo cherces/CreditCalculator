@@ -5,7 +5,7 @@ namespace CreditCalculator.Services;
 
 public class YearlyRateCreditCalculator : ICreditCalculator
 {
-    public List<PaymentsScheduleItem> CalculateAnnuitetPaymentsSchedule(CreditParametresBase creditParametres)
+    public IReadOnlyList<PaymentsScheduleItem> CalculateAnnuitetPaymentsSchedule(CreditParametresBase creditParametres)
     {
         var paymentsSchedule = new List<PaymentsScheduleItem>();
         
@@ -53,7 +53,7 @@ public class YearlyRateCreditCalculator : ICreditCalculator
         return paymentsSchedule;
     }
 
-    public List<PaymentsScheduleItem> CalculateDifferentiatedPaymentsSchedule(CreditParametresBase creditParametres)
+    public IReadOnlyList<PaymentsScheduleItem> CalculateDifferentiatedPaymentsSchedule(CreditParametresBase creditParametres)
     {
         var paymentsSchedule = new List<PaymentsScheduleItem>();
         
