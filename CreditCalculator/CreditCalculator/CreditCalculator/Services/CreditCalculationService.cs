@@ -1,26 +1,23 @@
 using CreditCalculator.Models;
 using CreditCalculator.Models.Enums;
 using CreditCalculator.Models.Form;
+using CreditCalculator.Services.Helpers;
 using CreditCalculator.Services.Interfaces;
 
 namespace CreditCalculator.Services;
 
 public class CreditCalculationService : ICreditCalculationService
 {
-    private readonly ICreditParametersFactory _paramFactory;
     private readonly ICreditCalculatorFactory _calculatorFactory;
 
-    public CreditCalculationService(
-        ICreditParametersFactory paramFactory,
-        ICreditCalculatorFactory calculatorFactory)
+    public CreditCalculationService(ICreditCalculatorFactory calculatorFactory)
     {
-        _paramFactory = paramFactory;
         _calculatorFactory = calculatorFactory;
     }
 
     public CreditCalculateResultViewModel Calculate(CreditParametersFormModel model)
     {
-        var parameters = _paramFactory.CreateParameters(model);
+        var parameters = CreditParametersMapper.Map(model);
         var calculator = _calculatorFactory.GetCalculator(model.RateType);
 
         var schedule = model.PaymentType switch
