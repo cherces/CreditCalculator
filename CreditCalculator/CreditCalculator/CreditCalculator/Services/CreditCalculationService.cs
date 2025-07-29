@@ -7,27 +7,37 @@ namespace CreditCalculator.Services;
 
 public class CreditCalculationService : ICreditCalculationService
 {
-    private readonly ICreditParametresFactory _paramFactory;
+    private readonly ICreditParametersFactory _paramFactory;
     private readonly ICreditCalculatorFactory _calculatorFactory;
 
     public CreditCalculationService(
-        ICreditParametresFactory paramFactory,
+        ICreditParametersFactory paramFactory,
         ICreditCalculatorFactory calculatorFactory)
     {
         _paramFactory = paramFactory;
         _calculatorFactory = calculatorFactory;
     }
 
-    public IReadOnlyList<PaymentsScheduleItem> Calculate(CreditParametresFormModel model)
+    public CreditCalculateResultViewModel Calculate(CreditParametersFormModel model)
     {
         var parameters = _paramFactory.CreateParameters(model);
         var calculator = _calculatorFactory.GetCalculator(model.RateType);
 
-        return model.PaymentType switch
+        var schedule = model.PaymentType switch
         {
             PaymentType.Annuity => calculator.CalculateAnnuitetPaymentsSchedule(parameters),
             PaymentType.Differentiated => calculator.CalculateDifferentiatedPaymentsSchedule(parameters),
             _ => throw new NotSupportedException("Unknown payment type")
+        };
+        
+        var totalPayment = schedule.Sum(p => p.Amount);
+        var overpayment = totalPayment - parameters.Amount;
+
+        return new CreditCalculateResultViewModel
+        {
+            Schedule = schedule,
+            TotalPayment = Math.Round(totalPayment, 2),
+            Overpayment = Math.Round(overpayment, 2)
         };
     }
 }

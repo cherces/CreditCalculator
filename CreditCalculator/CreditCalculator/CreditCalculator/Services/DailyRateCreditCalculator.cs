@@ -5,17 +5,17 @@ namespace CreditCalculator.Services;
 
 public class DailyRateCreditCalculator : ICreditCalculator
 {
-    public IReadOnlyList<PaymentsScheduleItem> CalculateAnnuitetPaymentsSchedule(CreditParametresBase creditParametres)
+    public IReadOnlyList<PaymentsScheduleItem> CalculateAnnuitetPaymentsSchedule(CreditParametersBase creditParametres)
     {
         var paymentsSchedule = new List<PaymentsScheduleItem>();
         
-        var dailyRateCreditParametres = creditParametres as DailyRateCreditParametres;
+        var dailyRateCreditParametres = creditParametres as DailyRateCreditParameters;
 
         // 1. Количество платежей
         int n = (int)Math.Ceiling((double)dailyRateCreditParametres.Term / dailyRateCreditParametres.StepDays);
 
         // 2. Ставка за один шаг
-        decimal i = dailyRateCreditParametres.Rate * dailyRateCreditParametres.StepDays;
+        decimal i = (dailyRateCreditParametres.Rate / 100) * dailyRateCreditParametres.StepDays;
 
         // 3. Аннуитетный коэффициент K
         decimal k = (i * (decimal)Math.Pow(1 + (double)i, n))
@@ -32,7 +32,7 @@ public class DailyRateCreditCalculator : ICreditCalculator
         for (int step = 1; step <= n; step++)
         {
             // 6. Процентная часть(p_n) = остаток долга * дневную ставку
-            decimal interest = debt * dailyRateCreditParametres.Rate * dailyRateCreditParametres.StepDays;
+            decimal interest = debt * (dailyRateCreditParametres.Rate / 100) * dailyRateCreditParametres.StepDays;
 
             // 7. Основная часть(s) = платеж - процентная часть платежа
             decimal principal = stepPayment - interest;
@@ -56,11 +56,11 @@ public class DailyRateCreditCalculator : ICreditCalculator
         return paymentsSchedule;
     }
 
-    public IReadOnlyList<PaymentsScheduleItem> CalculateDifferentiatedPaymentsSchedule(CreditParametresBase creditParametres)
+    public IReadOnlyList<PaymentsScheduleItem> CalculateDifferentiatedPaymentsSchedule(CreditParametersBase creditParametres)
     {
         var paymentsSchedule = new List<PaymentsScheduleItem>();
         
-        var dailyRateCreditParametres = creditParametres as DailyRateCreditParametres;
+        var dailyRateCreditParametres = creditParametres as DailyRateCreditParameters;
 
         // Количество платежей
         int n = (int)Math.Ceiling((decimal)dailyRateCreditParametres.Term / dailyRateCreditParametres.StepDays);
@@ -81,7 +81,7 @@ public class DailyRateCreditCalculator : ICreditCalculator
                 : dailyRateCreditParametres.StepDays;
 
             // Проценты за этот период
-            decimal interest = debt * dailyRateCreditParametres.Rate * days;
+            decimal interest = debt * (dailyRateCreditParametres.Rate / 100) * days;
 
             // Новый остаток долга
             decimal newDebt = debt - principal;

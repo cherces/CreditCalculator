@@ -3,7 +3,7 @@ using CreditCalculator.Models.Form;
 
 namespace CreditCalculator.Services.Interfaces;
 
-public interface ICreditParametresFactory
+public interface ICreditParametersFactory
 {
-    CreditParametresBase CreateParameters(CreditParametresFormModel formModel);
+    CreditParametersBase CreateParameters(CreditParametersFormModel formModel);
 }

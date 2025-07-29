@@ -1,6 +1,6 @@
 namespace CreditCalculator.Models;
 
-public class DailyRateCreditParametres : CreditParametresBase
+public class DailyRateCreditParameters : CreditParametersBase
 {
     public int Term { get; set; }
     public int StepDays { get; set; }

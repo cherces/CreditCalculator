@@ -5,20 +5,20 @@ using CreditCalculator.Services.Interfaces;
 
 namespace CreditCalculator.Services;
 
-public class CreditParametresFactory :ICreditParametresFactory
+public class CreditParametersFactory :ICreditParametersFactory
 {
-    public CreditParametresBase CreateParameters(CreditParametresFormModel model)
+    public CreditParametersBase CreateParameters(CreditParametersFormModel model)
     {
         return model.RateType switch
         {
-            RateType.Yearly => new YearlyRateCreditParametres
+            RateType.Yearly => new YearlyRateCreditParameters
             {
                 Amount = model.Amount,
                 Term = model.Term,
                 Rate = model.Rate,
                 PaymentType = model.PaymentType
             },
-            RateType.Daily => new DailyRateCreditParametres
+            RateType.Daily => new DailyRateCreditParameters
             {
                 Amount = model.Amount,
                 Term = model.Term,

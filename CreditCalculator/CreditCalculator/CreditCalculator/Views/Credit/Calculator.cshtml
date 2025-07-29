@@ -1,55 +1,68 @@
-@model CreditCalculator.Models.Form.CreditParametresFormModel
+@model CreditCalculator.Models.Form.CreditParametersFormModel
 
 @{
     ViewData["Title"] = "Кредитный калькулятор";
 }
 
-<div class="container mt-4">
-    <h2>Кредитный калькулятор</h2>
-    <form asp-action="Calculator" method="post" id="creditForm">
-        <div class="form-group">
-            <label asp-for="RateType"></label>
-            <select asp-for="RateType"
-                    asp-items="Html.GetEnumSelectList<CreditCalculator.Models.Enums.RateType>()"
-                    class="form-control"
-                    id="rateType">
-            </select>
-        </div>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg rounded">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Кредитный калькулятор</h4>
+                </div>
 
-        <div class="form-group">
-            <label asp-for="Amount"></label>
-            <input asp-for="Amount" class="form-control" />
-            <span asp-validation-for="Amount" class="text-danger"></span>
-        </div>
+                <div class="card-body">
+                    <form asp-action="Calculator" method="post" id="creditForm" novalidate>
+                        <div class="mb-3">
+                            <label asp-for="RateType" class="form-label fw-bold"></label>
+                            <select asp-for="RateType"
+                                    asp-items="Html.GetEnumSelectList<CreditCalculator.Models.Enums.RateType>()"
+                                    class="form-select"
+                                    id="rateType">
+                            </select>
+                        </div>
 
-        <div class="form-group">
-            <label asp-for="Term"></label>
-            <input asp-for="Term" class="form-control" />
-            <span asp-validation-for="Term" class="text-danger"></span>
-        </div>
+                        <div class="mb-3">
+                            <label asp-for="Amount" class="form-label fw-bold"></label>
+                            <input asp-for="Amount" class="form-control" placeholder="Например, 500000" />
+                            <span asp-validation-for="Amount" class="text-danger small"></span>
+                        </div>
 
-        <div class="form-group">
-            <label asp-for="Rate"></label>
-            <input asp-for="Rate" class="form-control" />
-            <span asp-validation-for="Rate" class="text-danger"></span>
-        </div>
+                        <div class="mb-3">
+                            <label asp-for="Term" class="form-label fw-bold"></label>
+                            <input asp-for="Term" class="form-control" placeholder="Количество месяцев" />
+                            <span asp-validation-for="Term" class="text-danger small"></span>
+                        </div>
 
-        <div class="form-group" id="stepDaysBlock" style="display:none;">
-            <label asp-for="StepDays"></label>
-            <input asp-for="StepDays" class="form-control" />
-            <span asp-validation-for="StepDays" class="text-danger"></span>
-        </div>
+                        <div class="mb-3">
+                            <label asp-for="Rate" class="form-label fw-bold"></label>
+                            <input asp-for="Rate" class="form-control" placeholder="Например, 13.5" />
+                            <span asp-validation-for="Rate" class="text-danger small"></span>
+                        </div>
 
-        <div class="form-group">
-            <label asp-for="PaymentType"></label>
-            <select asp-for="PaymentType"
-                    asp-items="Html.GetEnumSelectList<CreditCalculator.Models.Enums.PaymentType>()"
-                    class="form-control">
-            </select>
-        </div>
+                        <div class="mb-3" id="stepDaysBlock" style="display:none;">
+                            <label asp-for="StepDays" class="form-label fw-bold"></label>
+                            <input asp-for="StepDays" class="form-control" placeholder="Например, 30" />
+                            <span asp-validation-for="StepDays" class="text-danger small"></span>
+                        </div>
 
-        <button type="submit" class="btn btn-success mt-3">Рассчитать</button>
-    </form>
+                        <div class="mb-3">
+                            <label asp-for="PaymentType" class="form-label fw-bold"></label>
+                            <select asp-for="PaymentType"
+                                    asp-items="Html.GetEnumSelectList<CreditCalculator.Models.Enums.PaymentType>()"
+                                    class="form-select">
+                            </select>
+                        </div>
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-success btn-lg">Рассчитать</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
@@ -57,15 +70,16 @@
     <script>
         $(function () {
             function toggleStepDays() {
-                let val = $("#rateType").val();
-                if (val === "2") { // Daily = 2
-                    $("#stepDaysBlock").show();
+                const val = $("#rateType").val();
+                // Предполагается, что Daily = 2
+                if (val === "2") {
+                    $("#stepDaysBlock").slideDown();
                 } else {
-                    $("#stepDaysBlock").hide();
+                    $("#stepDaysBlock").slideUp();
                 }
             }
 
-            $("#rateType").change(toggleStepDays);
+            $("#rateType").on("change", toggleStepDays);
             toggleStepDays();
         });
     </script>

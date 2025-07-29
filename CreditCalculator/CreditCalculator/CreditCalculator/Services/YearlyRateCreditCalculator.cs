@@ -5,14 +5,14 @@ namespace CreditCalculator.Services;
 
 public class YearlyRateCreditCalculator : ICreditCalculator
 {
-    public IReadOnlyList<PaymentsScheduleItem> CalculateAnnuitetPaymentsSchedule(CreditParametresBase creditParametres)
+    public IReadOnlyList<PaymentsScheduleItem> CalculateAnnuitetPaymentsSchedule(CreditParametersBase creditParametres)
     {
         var paymentsSchedule = new List<PaymentsScheduleItem>();
         
-        var yearlyRateCreditParametres = creditParametres as YearlyRateCreditParametres;
+        var yearlyRateCreditParametres = creditParametres as YearlyRateCreditParameters;
 
         // 1. Переводим годовую ставку в месячную
-        decimal i = creditParametres.Rate / 12;
+        decimal i = (creditParametres.Rate / 100) / 12;
 
         // 2. Вычисляем аннуитетный коэффициент K
         decimal k = (i * (decimal)Math.Pow(1 + (double)i, yearlyRateCreditParametres.Term))
@@ -53,14 +53,14 @@ public class YearlyRateCreditCalculator : ICreditCalculator
         return paymentsSchedule;
     }
 
-    public IReadOnlyList<PaymentsScheduleItem> CalculateDifferentiatedPaymentsSchedule(CreditParametresBase creditParametres)
+    public IReadOnlyList<PaymentsScheduleItem> CalculateDifferentiatedPaymentsSchedule(CreditParametersBase creditParametres)
     {
         var paymentsSchedule = new List<PaymentsScheduleItem>();
         
-        var yearlyRateCreditParametres = creditParametres as YearlyRateCreditParametres;
+        var yearlyRateCreditParametres = creditParametres as YearlyRateCreditParameters;
         
         // Переводим годовую ставку в месячную
-        decimal i = yearlyRateCreditParametres.Rate / 12;
+        decimal i = (yearlyRateCreditParametres.Rate / 100) / 12;
         
         decimal principal = yearlyRateCreditParametres.Amount / yearlyRateCreditParametres.Term;
         

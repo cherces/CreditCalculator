@@ -3,7 +3,7 @@ using CreditCalculator.Models.Enums;
 
 namespace CreditCalculator.Models.Form;
 
-public class CreditParametresFormModel
+public class CreditParametersFormModel
 {
     [Required]
     public RateType RateType { get; set; } // % ставка за "Год" или "День"

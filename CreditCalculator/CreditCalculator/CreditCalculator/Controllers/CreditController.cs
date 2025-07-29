@@ -17,11 +17,11 @@ public class CreditController : Controller
     [HttpGet]
     public IActionResult Calculator()
     {
-        return View(new CreditParametresFormModel());
+        return View(new CreditParametersFormModel());
     }
 
     [HttpPost]
-    public IActionResult Calculator(CreditParametresFormModel model)
+    public IActionResult Calculator(CreditParametersFormModel model)
     {
         if (!ModelState.IsValid)
             return View(model);

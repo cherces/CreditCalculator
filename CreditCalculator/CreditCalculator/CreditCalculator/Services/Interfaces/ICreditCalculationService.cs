@@ -5,5 +5,5 @@ namespace CreditCalculator.Services.Interfaces;
 
 public interface ICreditCalculationService
 {
-    IReadOnlyList<PaymentsScheduleItem> Calculate(CreditParametresFormModel model);
+    CreditCalculateResultViewModel Calculate(CreditParametersFormModel model);
 }

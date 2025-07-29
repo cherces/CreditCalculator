@@ -2,7 +2,7 @@ using CreditCalculator.Models.Enums;
 
 namespace CreditCalculator.Models;
 
-public abstract class CreditParametresBase
+public abstract class CreditParametersBase
 {
     public decimal Amount { get; set; }
     public decimal Rate { get; set; }

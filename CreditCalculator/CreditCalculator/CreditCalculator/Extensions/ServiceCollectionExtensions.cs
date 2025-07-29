@@ -7,13 +7,13 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddCreditCalculatorServices(this IServiceCollection services)
     {
-        services.AddScoped<ICreditCalculatorFactory, CreditCalculatorFactory>();
-        services.AddScoped<ICreditParametresFactory, CreditParametresFactory>();
+        services.AddSingleton<ICreditCalculatorFactory, CreditCalculatorFactory>();
+        services.AddSingleton<ICreditParametersFactory, CreditParametersFactory>();
         
         services.AddSingleton<YearlyRateCreditCalculator>();
         services.AddSingleton<DailyRateCreditCalculator>();
         
-        services.AddScoped<ICreditCalculationService, CreditCalculationService>();
+        services.AddSingleton<ICreditCalculationService, CreditCalculationService>();
 
         return services;
     }

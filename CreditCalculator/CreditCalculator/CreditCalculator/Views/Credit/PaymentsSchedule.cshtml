@@ -1,4 +1,4 @@
-@model  IReadOnlyList<CreditCalculator.Models.PaymentsScheduleItem>
+@model CreditCalculator.Models.CreditCalculateResultViewModel
 
 @{
     ViewData["Title"] = "График платежей";
@@ -6,39 +6,38 @@
 
 <div class="container mt-4">
     <h2>График платежей</h2>
-
-    @if (Model == null || !Model.Any())
-    {
-        <p>Нет данных для отображения.</p>
-    }
-    else
-    {
-        <table class="table table-bordered table-striped">
-            <thead>
+    <table class="table table-bordered table-striped mt-3">
+        <thead class="thead-dark">
+        <tr>
+            <th>№</th>
+            <th>Дата</th>
+            <th>Платёж</th>
+            <th>Основной долг</th>
+            <th>Проценты</th>
+            <th>Остаток долга</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.Schedule)
+        {
             <tr>
-                <th>№</th>
-                <th>Дата платежа</th>
-                <th>Сумма платежа</th>
-                <th>Основной долг</th>
-                <th>Проценты</th>
-                <th>Остаток долга</th>
+                <td>@item.PaymentNumber</td>
+                <td>@item.PaymentDate.ToString("dd.MM.yyyy")</td>
+                <td>@item.Amount</td>
+                <td>@item.PrincipalAmount</td>
+                <td>@item.InterestAmount</td>
+                <td>@item.DebtAmount</td>
             </tr>
-            </thead>
-            <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.PaymentNumber</td>
-                    <td>@item.PaymentDate.ToString("dd.MM.yyyy")</td>
-                    <td>@item.Amount</td>
-                    <td>@item.PrincipalAmount</td>
-                    <td>@item.InterestAmount</td>
-                    <td>@item.DebtAmount</td>
-                </tr>
-            }
-            </tbody>
-        </table>
-    }
+        }
+        </tbody>
+        <tfoot>
+        <tr class="table-success font-weight-bold">
+            <td colspan="2">Итого:</td>
+            <td>@Model.TotalPayment</td>
+            <td colspan="3">Переплата: @Model.Overpayment</td>
+        </tr>
+        </tfoot>
+    </table>
 
-    <a class="btn btn-primary" href="@Url.Action("Calculator", "Credit")">Назад</a>
+    <a asp-action="Calculator" class="btn btn-primary mt-3">Новый расчёт</a>
 </div>
